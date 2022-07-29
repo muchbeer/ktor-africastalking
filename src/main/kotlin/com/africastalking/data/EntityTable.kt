@@ -5,7 +5,7 @@ import org.ktorm.schema.Table
 import org.ktorm.schema.int
 import org.ktorm.schema.varchar
 
-object UssdTable : Table<UssdEntity>("ussdmuchbeer"){
+object UssdTable : Table<UssdEntity>("ussd"){
     val menuPrimaryKey = varchar("menuPrimaryKey").primaryKey().bindTo { it.menuPrimaryKey }
     val sessionId = varchar("sessionId").bindTo { it.sessionId }
     val phoneNumber = varchar("phoneNumber").bindTo { it.phoneNumber }
