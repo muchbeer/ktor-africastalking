@@ -1,9 +1,11 @@
 package com.africastalking.route
 
 import com.africastalking.data.DatabaseFactory
+import com.africastalking.data.USSDSessionTable
 import com.africastalking.model.DataState
 import com.africastalking.model.SmsContent
 import com.africastalking.model.USSDModel
+import com.africastalking.model.USSDSessions
 import com.africastalking.repository.Repository
 import com.africastalking.repository.RepositoryImpl
 import io.ktor.http.*
@@ -42,13 +44,25 @@ log.info("Enter configureRoute")
             val responseSave : String = repository.processTextResponse(text)
 
 
-        val saveUssd =   repository.insertUSSD(
-                USSDModel(
-                sessionId = sessionID, phoneNumber = phoneNumber, networkCode = networkCode,
-                    serviceCode = serviceCode, text= responseSave ))
 
-            call.application.log.info("the value save is $saveUssd")
-            call.respondText(response)
+            val checkSession = repository.findUSSDSessionById(sessionID)
+
+            if (checkSession !=null)  {
+                val saveUssd =   repository.insertUSSDMenu(
+                    USSDSessions( sessionId = sessionID, text= responseSave ))
+
+                call.application.log.info("the value save is $saveUssd")
+                call.respondText(response)
+            } else {
+                val saveUssd =   repository.insertUSSD(
+                    USSDModel(
+                        sessionId = sessionID, phoneNumber = phoneNumber, networkCode = networkCode,
+                        serviceCode = serviceCode, text= responseSave ))
+
+                call.application.log.info("the new entry is $saveUssd")
+                call.respondText(response)
+            }
+
         }
 
         get("/ussdlist") {

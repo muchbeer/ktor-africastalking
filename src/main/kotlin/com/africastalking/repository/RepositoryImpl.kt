@@ -1,7 +1,7 @@
 package com.africastalking.repository
 
 
-import com.africastalking.data.USSDMenu
+import com.africastalking.data.USSDSessionTable
 import com.africastalking.data.UssdTable
 import com.africastalking.data.UssdTable.menuPrimaryKey
 import com.africastalking.data.UssdTable.networkCode
@@ -28,14 +28,16 @@ class RepositoryImpl(private val ktormDB : Database) : Repository {
         }
     }
 
-    override suspend fun findUSSDSessionById(msessionID: String): List<USSDSessions> {
+    override suspend fun findUSSDSessionById(msessionID: String): USSDSessions? {
 
-       return ktormDB.from(UssdTable).
-                                select().
-                              where  (sessionId like "%$sessionId%")
-           .map { row->
-            USSDSessions(sessionId = row[sessionId]!!, phoneNumber = row[phoneNumber]!!,
-                text = row[text]!!)   }
+    return ktormDB.sequenceOf(UssdTable).firstOrNull {
+            it.sessionId eq msessionID
+        }?.let {
+            USSDSessions(
+                sessionId = it.sessionId,
+                 text = it.text
+            )
+        }
     }
 
     override suspend fun updateSessionId(msessionID: String, mUSSD: USSDModel): USSDModel {
@@ -79,12 +81,13 @@ class RepositoryImpl(private val ktormDB : Database) : Repository {
         ) else USSDModel("2", "0755", "123", "000", "nothing entered")
     }
 
-    override suspend fun insertUSSDMenu(ussdMenu: USSDMenu) {
-       val ussdMenuID  = ktormDB.insertAndGenerateKey(USSDMenu) {
-           set(USSDMenu.sessionId, ussdMenu.sessionId)
-           set(USSDMenu.phoneNumber, ussdMenu.phoneNumber)
-           set(USSDMenu.textResponse, ussdMenu.textResponse)
+    override suspend fun insertUSSDMenu(ussdMenu: USSDSessions) : USSDSessions {
+       ktormDB.insert(USSDSessionTable) {
+           set(USSDSessionTable.sessionId, ussdMenu.sessionId)
+           set(USSDSessionTable.textResponse, ussdMenu.text)
        }
+
+        return USSDSessions(sessionId = ussdMenu.sessionId, text = ussdMenu.text)
     }
 
     override suspend fun ussdMenu(text: String): String {

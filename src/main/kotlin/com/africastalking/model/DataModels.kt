@@ -21,6 +21,5 @@ data class USSDModel(
 
 data class USSDSessions(
     val sessionId: String,
-    val phoneNumber: String,
     val text : String
 )
