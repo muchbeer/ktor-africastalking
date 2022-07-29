@@ -54,13 +54,11 @@ log.info("Enter configureRoute")
         get("/ussdlist") {
             val listOfUssd = repository.retrieveAllUSSD()
             listOfUssd.forEach { ussdModel ->
-               val listSessions = repository.findUSSDSessionById(ussdModel.sessionId)
-                call.respond(mapOf("$ussdModel" to listSessions))
+                val listSessions = repository.findUSSDSessionById(ussdModel.sessionId)
+
+                call.respond(mapOf(ussdModel.sessionId to listSessions))
             }
         }
 
-        get("/ussdbysession") {
-            val sessionList = repository
-        }
     }
 }
