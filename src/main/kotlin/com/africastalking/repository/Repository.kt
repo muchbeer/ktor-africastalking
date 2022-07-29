@@ -2,12 +2,13 @@ package com.africastalking.repository
 
 import com.africastalking.data.USSDMenu
 import com.africastalking.model.USSDModel
+import com.africastalking.model.USSDSessions
 
 
 interface Repository {
     suspend fun retrieveAllUSSD(): List<USSDModel>
 
-    suspend fun findUSSDSessionById(msessionID: String): USSDModel?
+    suspend fun findUSSDSessionById(msessionID: String): List<USSDSessions>
 
     suspend fun updateSessionId(msessionID: String, mUSSD: USSDModel): USSDModel
 

@@ -18,3 +18,9 @@ data class USSDModel(
     val serviceCode : String,
     val text : String
 )
+
+data class USSDSessions(
+    val sessionId: String,
+    val phoneNumber: String,
+    val text : String
+)

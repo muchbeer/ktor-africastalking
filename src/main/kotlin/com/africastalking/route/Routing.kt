@@ -41,6 +41,7 @@ log.info("Enter configureRoute")
             val response : String = repository.ussdMenu(text)
             val responseSave : String = repository.processTextResponse(text)
 
+
         val saveUssd =   repository.insertUSSD(
                 USSDModel(
                 sessionId = sessionID, phoneNumber = phoneNumber, networkCode = networkCode,
@@ -48,7 +49,18 @@ log.info("Enter configureRoute")
 
             call.application.log.info("the value save is $saveUssd")
             call.respondText(response)
+        }
 
+        get("/ussdlist") {
+            val listOfUssd = repository.retrieveAllUSSD()
+            listOfUssd.forEach { ussdModel ->
+               val listSessions = repository.findUSSDSessionById(ussdModel.sessionId)
+                call.respond(mapOf("$ussdModel" to listSessions))
+            }
+        }
+
+        get("/ussdbysession") {
+            val sessionList = repository
         }
     }
 }

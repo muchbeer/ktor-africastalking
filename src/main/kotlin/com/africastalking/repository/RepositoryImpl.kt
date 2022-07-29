@@ -10,14 +10,10 @@ import com.africastalking.data.UssdTable.serviceCode
 import com.africastalking.data.UssdTable.sessionId
 import com.africastalking.data.UssdTable.text
 import com.africastalking.model.USSDModel
+import com.africastalking.model.USSDSessions
 import org.ktorm.database.Database
-import org.ktorm.dsl.eq
-import org.ktorm.dsl.insert
-import org.ktorm.dsl.insertAndGenerateKey
-import org.ktorm.dsl.update
-import org.ktorm.entity.firstOrNull
-import org.ktorm.entity.sequenceOf
-import org.ktorm.entity.toList
+import org.ktorm.dsl.*
+import org.ktorm.entity.*
 
 class RepositoryImpl(private val ktormDB : Database) : Repository {
     override suspend fun retrieveAllUSSD(): List<USSDModel> {
@@ -32,15 +28,14 @@ class RepositoryImpl(private val ktormDB : Database) : Repository {
         }
     }
 
-    override suspend fun findUSSDSessionById(msessionID: String): USSDModel? {
-        return ktormDB.sequenceOf(UssdTable).firstOrNull() {
-            it.sessionId eq msessionID
-        }?.let {
-            USSDModel(
-                sessionId = it.sessionId, phoneNumber = it.phoneNumber,
-                networkCode = it.networkCode, serviceCode = it.serviceCode, text = it.text
-            )
-        }
+    override suspend fun findUSSDSessionById(msessionID: String): List<USSDSessions> {
+
+       return ktormDB.from(UssdTable).
+                                select().
+                              where  (sessionId like "%$sessionId%")
+           .map { row->
+            USSDSessions(sessionId = row[sessionId]!!, phoneNumber = row[phoneNumber]!!,
+                text = row[text]!!)   }
     }
 
     override suspend fun updateSessionId(msessionID: String, mUSSD: USSDModel): USSDModel {
