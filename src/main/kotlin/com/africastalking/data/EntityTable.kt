@@ -5,8 +5,8 @@ import org.ktorm.schema.Table
 import org.ktorm.schema.int
 import org.ktorm.schema.varchar
 
-object UssdTable : Table<UssdEntity>("ussd"){
-    val menuPrimaryKey = int("menuPrimaryKey").primaryKey().bindTo { it.menuPrimaryKey }
+object UssdTable : Table<UssdEntity>("ussdmuchbeer"){
+    val menuPrimaryKey = varchar("menuPrimaryKey").primaryKey().bindTo { it.menuPrimaryKey }
     val sessionId = varchar("sessionId").bindTo { it.sessionId }
     val phoneNumber = varchar("phoneNumber").bindTo { it.phoneNumber }
     val networkCode = varchar("networkCode").bindTo { it.networkCode }
@@ -23,7 +23,7 @@ object USSDMenu : Table<UssdMenuEntity>("ussd_menu") {
 interface UssdEntity : Entity<UssdEntity> {
 
     companion object : Entity.Factory<UssdEntity>()
-    val menuPrimaryKey : Int
+    val menuPrimaryKey : String
     val sessionId : String
     val phoneNumber : String
     val networkCode : String

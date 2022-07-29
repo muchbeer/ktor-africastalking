@@ -66,7 +66,7 @@ class RepositoryImpl(private val ktormDB : Database) : Repository {
 
         val randomID = (100..10000).random()
         val ussdID: Int = ktormDB.insert(UssdTable) {
-            set(menuPrimaryKey, randomID)
+            set(menuPrimaryKey, "$randomID")
             set(sessionId, ussdModel.sessionId)
             set(phoneNumber, ussdModel.phoneNumber)
             set(networkCode, ussdModel.networkCode)
