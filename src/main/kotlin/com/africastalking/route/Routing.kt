@@ -48,12 +48,6 @@ log.info("Enter configureRoute")
             val checkSession = repository.findUSSDSessionById(sessionID)
 
             if (checkSession !=null)  {
-                val saveUssd =   repository.insertUSSDMenu(
-                    USSDSessions( sessionId = sessionID, text= responseSave ))
-
-                call.application.log.info("the value save is $saveUssd")
-                call.respondText(response)
-            } else {
                 val saveUssd =   repository.insertUSSD(
                     USSDModel(
                         sessionId = sessionID, phoneNumber = phoneNumber, networkCode = networkCode,
@@ -61,15 +55,21 @@ log.info("Enter configureRoute")
 
                 call.application.log.info("the new entry is $saveUssd")
                 call.respondText(response)
-            }
 
+
+            } else {
+                val saveUssd =   repository.insertUSSDMenu(
+                    USSDSessions( sessionId = sessionID, text= responseSave ))
+
+                call.application.log.info("the value save is $saveUssd")
+                call.respondText(response)
+            }
         }
 
         get("/ussdlist") {
             val listOfUssd = repository.retrieveAllUSSD()
             listOfUssd.forEach { ussdModel ->
                 val listSessions = repository.findUSSDSessionById(ussdModel.sessionId)
-
                 call.respond(mapOf(ussdModel.sessionId to listSessions))
             }
         }
