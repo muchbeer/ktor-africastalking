@@ -1,0 +1,1 @@
+web: ./build/install/ktor-africastalking/bin/ktor-africastalking

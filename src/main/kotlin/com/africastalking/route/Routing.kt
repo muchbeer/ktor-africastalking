@@ -38,7 +38,6 @@ log.info("Enter configureRoute")
             val serviceCode = ussdParameters["serviceCode"].toString()
             val text = ussdParameters["text"].toString()
 
-
             val response : String = repository.ussdMenu(text)
             val responseSave : String = repository.processTextResponse(text)
 

@@ -1,6 +1,5 @@
 package com.africastalking.data
 
-import com.africastalking.data.USSDMenu.bindTo
 import org.ktorm.entity.Entity
 import org.ktorm.schema.Table
 import org.ktorm.schema.int
