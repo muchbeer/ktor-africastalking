@@ -43,8 +43,6 @@ log.info("Enter configureRoute")
             val response : String = repository.ussdMenu(text)
             val responseSave : String = repository.processTextResponse(text)
 
-
-
             val checkSession = repository.findUSSDSessionById(sessionID)
 
             if (checkSession !=null)  {

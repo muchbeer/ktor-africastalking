@@ -30,12 +30,12 @@ class RepositoryImpl(private val ktormDB : Database) : Repository {
 
     override suspend fun findUSSDSessionById(msessionID: String): USSDSessions? {
 
-    return ktormDB.sequenceOf(UssdTable).firstOrNull {
+    return ktormDB.sequenceOf(USSDSessionTable).firstOrNull {
             it.sessionId eq msessionID
         }?.let {
             USSDSessions(
                 sessionId = it.sessionId,
-                 text = it.text
+                 text = it.textResponse
             )
         }
     }
