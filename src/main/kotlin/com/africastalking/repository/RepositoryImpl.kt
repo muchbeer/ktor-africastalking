@@ -63,7 +63,10 @@ class RepositoryImpl(private val ktormDB : Database) : Repository {
     }
 
     override suspend fun insertUSSD(ussdModel: USSDModel): USSDModel {
+
+        val randomID = (100..10000).random()
         val ussdID: Int = ktormDB.insert(UssdTable) {
+            set(menuPrimaryKey, randomID)
             set(sessionId, ussdModel.sessionId)
             set(phoneNumber, ussdModel.phoneNumber)
             set(networkCode, ussdModel.networkCode)
