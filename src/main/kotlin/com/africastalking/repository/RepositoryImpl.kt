@@ -28,6 +28,26 @@ class RepositoryImpl(private val ktormDB : Database) : Repository {
         }
     }
 
+    override suspend fun retrieveAllUSSDSession(): List<USSDSessions> {
+        return ktormDB.sequenceOf(USSDSessionTable).toList().map {
+            USSDSessions(sessionId = it.sessionId, text = it.textResponse)
+        }
+    }
+
+    override suspend fun retrieveAllUSSDSessionByID(msessionID: String): List<USSDModel> {
+      return  ktormDB.from(UssdTable).select()
+            .where { sessionId like "%$msessionID" }
+            .map { ussdMenu->
+                USSDModel(
+                    sessionId = ussdMenu[sessionId].toString(),
+                    phoneNumber =ussdMenu[phoneNumber].toString(),
+                    networkCode = ussdMenu[networkCode].toString(),
+                    serviceCode = ussdMenu[serviceCode].toString(),
+                    text = ussdMenu[text].toString()
+                )
+            }
+    }
+
     override suspend fun findUSSDSessionById(msessionID: String): USSDSessions? {
 
     return ktormDB.sequenceOf(USSDSessionTable).firstOrNull {

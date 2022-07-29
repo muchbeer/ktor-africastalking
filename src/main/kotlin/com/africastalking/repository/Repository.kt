@@ -1,12 +1,15 @@
 package com.africastalking.repository
 
-import com.africastalking.data.USSDSessionTable
 import com.africastalking.model.USSDModel
 import com.africastalking.model.USSDSessions
 
 
 interface Repository {
     suspend fun retrieveAllUSSD(): List<USSDModel>
+
+    suspend fun retrieveAllUSSDSession() : List<USSDSessions>
+
+    suspend fun retrieveAllUSSDSessionByID(msessionID: String) : List<USSDModel>
 
     suspend fun findUSSDSessionById(msessionID: String): USSDSessions?
 

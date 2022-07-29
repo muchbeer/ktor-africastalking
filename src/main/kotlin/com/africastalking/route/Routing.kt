@@ -2,10 +2,7 @@ package com.africastalking.route
 
 import com.africastalking.data.DatabaseFactory
 import com.africastalking.data.USSDSessionTable
-import com.africastalking.model.DataState
-import com.africastalking.model.SmsContent
-import com.africastalking.model.USSDModel
-import com.africastalking.model.USSDSessions
+import com.africastalking.model.*
 import com.africastalking.repository.Repository
 import com.africastalking.repository.RepositoryImpl
 import io.ktor.http.*
@@ -14,6 +11,7 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import org.ktorm.database.Database
+import kotlin.reflect.jvm.internal.impl.descriptors.deserialization.PlatformDependentDeclarationFilter.All
 
 fun Application.configureRouting() {
 
@@ -65,10 +63,14 @@ log.info("Enter configureRoute")
         }
 
         get("/ussdlist") {
-            val listOfUssd = repository.retrieveAllUSSD()
+            val listOfUssd = repository.retrieveAllUSSDSession()
             listOfUssd.forEach { ussdModel ->
-                val listSessions = repository.findUSSDSessionById(ussdModel.sessionId)
-                call.respond(mapOf(ussdModel.sessionId to listSessions))
+                val listSessions = repository.retrieveAllUSSDSessionByID(ussdModel.sessionId)
+                val jsonSessions = AllSessionModel(
+                    sessionId = ussdModel.sessionId,
+                    menuSession = listSessions
+                )
+                call.respond(jsonSessions)
             }
         }
 

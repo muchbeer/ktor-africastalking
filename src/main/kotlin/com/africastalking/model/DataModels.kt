@@ -23,3 +23,8 @@ data class USSDSessions(
     val sessionId: String,
     val text : String
 )
+
+data class AllSessionModel(
+    val menuSession: List<USSDModel>,
+    val sessionId: String
+)
