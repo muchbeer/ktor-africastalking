@@ -74,5 +74,13 @@ log.info("Enter configureRoute")
             }
         }
 
+        get("/ussdsessionlist") {
+            val listOfUssd = repository.retrieveAllUSSDSession()
+            call.respond(listOfUssd)
+        }
+
+        get("/ussdmenuList") {
+            val listOfMenu = repository.retrieveAllUSSD()
+        }
     }
 }
