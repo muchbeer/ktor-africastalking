@@ -81,6 +81,7 @@ log.info("Enter configureRoute")
 
         get("/ussdmenuList") {
             val listOfMenu = repository.retrieveAllUSSD()
+            call.respond(listOfMenu)
         }
     }
 }
