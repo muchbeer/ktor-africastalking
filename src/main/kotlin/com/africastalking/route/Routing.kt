@@ -63,15 +63,17 @@ log.info("Enter configureRoute")
         }
 
         get("/ussdlist") {
+            val addAllSession = mutableListOf<AllSessionModel>()
             val listOfUssd = repository.retrieveAllUSSDSession()
             listOfUssd.forEach { ussdModel ->
                 val listSessions = repository.retrieveAllUSSDSessionByID(ussdModel.sessionId)
-                val jsonSessions = AllSessionModel(
-                    sessionId = ussdModel.sessionId,
-                    menuSession = listSessions
-                )
-                call.respond(jsonSessions)
+              addAllSession.add(AllSessionModel(
+                  sessionId = ussdModel.sessionId,
+                  menuSession = listSessions
+              ))
+
             }
+            call.respond(addAllSession)
         }
 
         get("/ussdsessionlist") {
