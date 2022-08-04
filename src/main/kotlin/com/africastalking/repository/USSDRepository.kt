@@ -4,7 +4,7 @@ import com.africastalking.model.USSDModel
 import com.africastalking.model.USSDSessions
 
 
-interface Repository {
+interface USSDRepository {
     suspend fun retrieveAllUSSD(): List<USSDModel>
 
     suspend fun retrieveAllUSSDSession() : List<USSDSessions>
@@ -23,4 +23,5 @@ interface Repository {
 
     suspend fun processTextResponse(text: String) : String
 
+    suspend fun rumishoMenu(text: String) : String
 }

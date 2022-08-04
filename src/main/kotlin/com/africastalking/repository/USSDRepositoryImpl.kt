@@ -15,7 +15,7 @@ import org.ktorm.database.Database
 import org.ktorm.dsl.*
 import org.ktorm.entity.*
 
-class RepositoryImpl(private val ktormDB : Database) : Repository {
+class USSDRepositoryImpl(private val ktormDB : Database) : USSDRepository {
     override suspend fun retrieveAllUSSD(): List<USSDModel> {
         return ktormDB.sequenceOf(UssdTable).toList().map {
             USSDModel(
@@ -153,6 +153,31 @@ class RepositoryImpl(private val ktormDB : Database) : Repository {
       } else {
           "Error"
       }
+    }
+
+    override suspend fun rumishoMenu(text: String): String {
+        val response = StringBuilder()
+
+        if (text.isEmpty()) {
+            // This is the first request. Note how we start the response with CON
+            response.append("CON Chagua huduma\n1. MUITO wa TIMU yako\n2. Muito wa KANISA")
+
+        } else if(text.contentEquals("1")) {
+            response.append("CON Nunua MUITO wa TIMU yako\n1. Mnyama\n2. Mwananchi")
+        } else if (text.contentEquals("2")) {
+            response.append("CON Chagua muda wa huduma\n1. Mwezi 1  - Tsh 1,000" +
+                    "\n2. Miezi 3  - Tsh 3,000\n3. Miezi 6  - Tsh 6,000\n4. Miezi 12 - Tsh 12,000")
+        } else if (text.contentEquals("1*1")) {
+            response.append("CON Chagua muda wa huduma\n1. Mwezi 1  - Tsh 1,000" +
+                    "\n2. Miezi 3  - Tsh 3,000\n3. Miezi 6  - Tsh 6,000\n4. Miezi 12 - Tsh 12,000");
+        } else if (text.contentEquals("2*1")) {
+            response.append("CON Ingiza namba ya siri ya TigoPesa kulipa MobiAd kias Tsh 1,000")
+
+        } else if (text.contentEquals("1*1*1")) {
+            response.append("CON Ingiza namba ya siri ya TigoPesa kulipa MobiAd kias Tsh 1,000")
+        }
+        return response.toString()
+
     }
 
 }

@@ -47,4 +47,12 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 
+    implementation("org.json:json:20220320")
+    implementation ("com.google.code.gson:gson:2.9.1")
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-cio:$ktor_version")
+
+//    implementation("io.ktor:ktor-server-auth:$ktor_version")
+ //   implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
+
 }
