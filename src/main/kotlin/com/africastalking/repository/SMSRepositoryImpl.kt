@@ -1,6 +1,8 @@
 package com.africastalking.repository
 
+import com.africastalking.data.SmsTable
 import com.africastalking.model.ATMessage
+import com.africastalking.model.Recipient
 import com.google.gson.Gson
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -9,8 +11,10 @@ import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import org.json.XML
+import org.ktorm.database.Database
+import org.ktorm.dsl.insert
 
-class SMSRepositoryImpl : SMSRepository {
+class SMSRepositoryImpl(private val ktormDB : Database) : SMSRepository {
     override suspend fun sendSMS(atPhone: String, atMessage: String): ATMessage {
         val httpClient = HttpClient(CIO)
         val gson = Gson()
@@ -39,7 +43,20 @@ class SMSRepositoryImpl : SMSRepository {
         return responseObject
     }
 
-    override suspend fun saveMessage(atMessage: ATMessage) {
-        TODO("Not yet implemented")
+    override suspend fun saveMessage(atMessage: ATMessage) : Recipient?{
+        val recepient = atMessage.AfricasTalkingResponse.SMSMessageData.Recipients.Recipient
+
+        val smsId : Int = ktormDB.insert(SmsTable) {
+            set(SmsTable.messageId, recepient.messageId)
+            set(SmsTable.number, recepient.number)
+            set(SmsTable.message, atMessage.AfricasTalkingResponse.SMSMessageData.Message)
+            set(SmsTable.messageParts, recepient.messageParts)
+            set(SmsTable.cost, recepient.cost)
+            set(SmsTable.status, recepient.status)
+        }
+
+      return  if (smsId >= 0) Recipient(cost = recepient.cost, messageId = recepient.messageId,
+        messageParts = recepient.messageParts, number = recepient.number,
+        status = recepient.status, statusCode = 200) else null
     }
 }

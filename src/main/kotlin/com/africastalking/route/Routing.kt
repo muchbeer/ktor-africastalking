@@ -18,7 +18,7 @@ log.info("Enter configureRoute")
     val ktormDb : Database = DatabaseFactory.init()
 
     val USSDRepository : USSDRepository = USSDRepositoryImpl(ktormDb)
-    val smsRepository : SMSRepository = SMSRepositoryImpl()
+    val smsRepository : SMSRepository = SMSRepositoryImpl(ktormDb)
 
     routing {
         post("/sms") {
@@ -26,6 +26,7 @@ log.info("Enter configureRoute")
             val response : ATMessage = smsRepository.sendSMS(
                 atPhone = smses.number, atMessage = smses.message )
 
+            smsRepository.saveMessage(response)
             call.respond(response)
         }
 
