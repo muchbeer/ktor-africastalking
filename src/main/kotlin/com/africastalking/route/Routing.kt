@@ -42,7 +42,7 @@ log.info("Enter configureRoute")
             val ussdParameters = call.receiveParameters()
             val text = ussdParameters["text"].toString()
 
-            val response : String = USSDRepository.ussdMenu(text)
+            val response : String = USSDRepository.rumishoMenu(text)
             call.respondText(response)
 
         }
