@@ -161,9 +161,7 @@ class USSDRepositoryImpl(private val ktormDB : Database) : USSDRepository {
        val menuMap:HashMap<String,String> = HashMap()
 
        if (text.isEmpty()) {
-
             response.append("CON Chagua huduma\n1. MUITO wa TIMU yako\n2. Muito wa KANISA")
-
         } else if(text.contentEquals("1")) {
             response.append("CON Nunua MUITO wa TIMU yako\n1. Mnyama\n2. Mwananchi")
 
@@ -183,17 +181,15 @@ class USSDRepositoryImpl(private val ktormDB : Database) : USSDRepository {
             response.append("CON Ingiza namba ya siri ya TigoPesa kulipa MobiAd kias Tsh 3,000")
             menuMap.put("one_one_two", "option_one")
 
-        } else {
-            val responseArray = text.split("*").toTypedArray()
-          if(menuMap["one_one_two"]== "option_one") {
-              response.append("END Thank you, Your tigo namba is : ${responseArray[3]}")
-          } else if (menuMap["two_one"]== "option_two") {
-              response.append("END Thank you, Your tigo two namba is : ${responseArray[2]}")
-          }
-            else {
-              response.append("END Please try again later")
-          }
-        }
+        } else if (text.split("*").toTypedArray().count() ==4){
+
+           response.append("END Thank you the password is : ${text.split("*").toTypedArray()[3]}")
+        } else if (text.split("*").toTypedArray().count() ==3) {
+           response.append("END Thank you the password is : ${text.split("*").toTypedArray()[2]}")
+
+       } else {
+           response.append("END Please try again later")
+       }
         return response.toString()
 
     }
