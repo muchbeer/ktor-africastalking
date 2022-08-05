@@ -1,6 +1,12 @@
 package com.africastalking.repository
 
 import com.africastalking.data.SmsTable
+import com.africastalking.data.SmsTable.cost
+import com.africastalking.data.SmsTable.message
+import com.africastalking.data.SmsTable.messageId
+import com.africastalking.data.SmsTable.messageParts
+import com.africastalking.data.SmsTable.number
+import com.africastalking.data.SmsTable.status
 import com.africastalking.model.ATMessage
 import com.africastalking.model.Recipient
 import com.google.gson.Gson
@@ -47,12 +53,12 @@ class SMSRepositoryImpl(private val ktormDB : Database) : SMSRepository {
         val recepient = atMessage.AfricasTalkingResponse.SMSMessageData.Recipients.Recipient
 
         val smsId : Int = ktormDB.insert(SmsTable) {
-            set(SmsTable.messageId, recepient.messageId)
-            set(SmsTable.number, recepient.number)
-            set(SmsTable.message, atMessage.AfricasTalkingResponse.SMSMessageData.Message)
-            set(SmsTable.messageParts, recepient.messageParts)
-            set(SmsTable.cost, recepient.cost)
-            set(SmsTable.status, recepient.status)
+            set(messageId, recepient.messageId)
+            set(number, recepient.number)
+            set(message, atMessage.AfricasTalkingResponse.SMSMessageData.Message)
+            set(messageParts, recepient.messageParts)
+            set(cost, recepient.cost)
+            set(status, recepient.status)
         }
 
       return  if (smsId >= 0) Recipient(cost = recepient.cost, messageId = recepient.messageId,

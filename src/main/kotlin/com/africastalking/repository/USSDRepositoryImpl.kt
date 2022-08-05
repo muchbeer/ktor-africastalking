@@ -155,26 +155,44 @@ class USSDRepositoryImpl(private val ktormDB : Database) : USSDRepository {
       }
     }
 
+
     override suspend fun rumishoMenu(text: String): String {
         val response = StringBuilder()
+       val menuMap:HashMap<String,String> = HashMap()
 
-        if (text.isEmpty()) {
-            // This is the first request. Note how we start the response with CON
+       if (text.isEmpty()) {
+
             response.append("CON Chagua huduma\n1. MUITO wa TIMU yako\n2. Muito wa KANISA")
 
         } else if(text.contentEquals("1")) {
             response.append("CON Nunua MUITO wa TIMU yako\n1. Mnyama\n2. Mwananchi")
+
         } else if (text.contentEquals("2")) {
-            response.append("CON Chagua muda wa huduma\n1. Mwezi 1  - Tsh 1,000" +
+            response.append("CON Chagua muda wa huduma1\n1. Mwezi 1  - Tsh 1,000" +
                     "\n2. Miezi 3  - Tsh 3,000\n3. Miezi 6  - Tsh 6,000\n4. Miezi 12 - Tsh 12,000")
+
         } else if (text.contentEquals("1*1")) {
-            response.append("CON Chagua muda wa huduma\n1. Mwezi 1  - Tsh 1,000" +
+            response.append("CON Chagua muda wa huduma2\n1. Mwezi 1  - Tsh 1,000" +
                     "\n2. Miezi 3  - Tsh 3,000\n3. Miezi 6  - Tsh 6,000\n4. Miezi 12 - Tsh 12,000");
+
         } else if (text.contentEquals("2*1")) {
             response.append("CON Ingiza namba ya siri ya TigoPesa kulipa MobiAd kias Tsh 1,000")
+            menuMap.put("two_one", "option_two")
 
-        } else if (text.contentEquals("1*1*1")) {
-            response.append("CON Ingiza namba ya siri ya TigoPesa kulipa MobiAd kias Tsh 1,000")
+        } else if (text.contentEquals("1*1*2")) {
+            response.append("CON Ingiza namba ya siri ya TigoPesa kulipa MobiAd kias Tsh 3,000")
+            menuMap.put("one_one_two", "option_one")
+
+        } else {
+            val responseArray = text.split("*").toTypedArray()
+          if(menuMap["one_one_two"]== "option_one") {
+              response.append("END Thank you, Your tigo namba is : ${responseArray[3]}")
+          } else if (menuMap["two_one"]== "option_two") {
+              response.append("END Thank you, Your tigo two namba is : ${responseArray[2]}")
+          }
+            else {
+              response.append("END Please try again later")
+          }
         }
         return response.toString()
 

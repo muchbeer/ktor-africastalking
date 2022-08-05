@@ -37,6 +37,16 @@ log.info("Enter configureRoute")
             call.respondText("Working with Ktor Africastalking API")
         }
 
+        post("/ussdclient") {
+
+            val ussdParameters = call.receiveParameters()
+            val text = ussdParameters["text"].toString()
+
+            val response : String = USSDRepository.ussdMenu(text)
+            call.respondText(response)
+
+        }
+
         post("/ussd") {
             val ussdParameters = call.receiveParameters()
             val sessionID = ussdParameters["sessionId"].toString()
