@@ -27,13 +27,11 @@ class USSDRepositoryImpl(private val ktormDB : Database) : USSDRepository {
             )
         }
     }
-
     override suspend fun retrieveAllUSSDSession(): List<USSDSessions> {
         return ktormDB.sequenceOf(USSDSessionTable).toList().map {
             USSDSessions(sessionId = it.sessionId, text = it.textResponse)
         }
     }
-
     override suspend fun retrieveAllUSSDSessionByID(msessionID: String): List<USSDModel> {
       return  ktormDB.from(UssdTable).select()
             .where { sessionId like "%$msessionID" }
@@ -47,7 +45,6 @@ class USSDRepositoryImpl(private val ktormDB : Database) : USSDRepository {
                 )
             }
     }
-
     override suspend fun findUSSDSessionById(msessionID: String): USSDSessions? {
 
     return ktormDB.sequenceOf(USSDSessionTable).firstOrNull {
@@ -59,7 +56,6 @@ class USSDRepositoryImpl(private val ktormDB : Database) : USSDRepository {
             )
         }
     }
-
     override suspend fun updateSessionId(msessionID: String, mUSSD: USSDModel): USSDModel {
         val updteType = ktormDB.update(UssdTable) {
             set(sessionId, mUSSD.sessionId)
@@ -78,7 +74,6 @@ class USSDRepositoryImpl(private val ktormDB : Database) : USSDRepository {
             text = mUSSD.text
         )
     }
-
     override suspend fun insertUSSD(ussdModel: USSDModel): USSDModel {
 
         val randomID = (100..10000).random()
@@ -100,7 +95,6 @@ class USSDRepositoryImpl(private val ktormDB : Database) : USSDRepository {
             text = ussdModel.text
         ) else USSDModel("2", "0755", "123", "000", "nothing entered")
     }
-
     override suspend fun insertUSSDMenu(ussdMenu: USSDSessions) : USSDSessions {
        ktormDB.insert(USSDSessionTable) {
            set(USSDSessionTable.sessionId, ussdMenu.sessionId)
@@ -109,7 +103,6 @@ class USSDRepositoryImpl(private val ktormDB : Database) : USSDRepository {
 
         return USSDSessions(sessionId = ussdMenu.sessionId, text = ussdMenu.text)
     }
-
     override suspend fun ussdMenu(text: String): String {
 
         val response = StringBuilder()
@@ -138,7 +131,6 @@ class USSDRepositoryImpl(private val ktormDB : Database) : USSDRepository {
         }
         return response.toString()
     }
-
     override suspend fun processTextResponse(text: String): String {
       return  if (text.isEmpty()) {
           "What would you like to check"
@@ -154,8 +146,6 @@ class USSDRepositoryImpl(private val ktormDB : Database) : USSDRepository {
           "Error"
       }
     }
-
-
     override suspend fun rumishoMenu(text: String): String {
         val response = StringBuilder()
        val menuMap:HashMap<String,String> = HashMap()
